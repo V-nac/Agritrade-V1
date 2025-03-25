@@ -10,30 +10,35 @@ import { useRouter } from "next/navigation"
 
 // Mock data for demonstration
 const topSearches = [
-  { id: 1, name: "Wheat", change: 12 },
-  { id: 2, name: "Corn", change: 8 },
-  { id: 3, name: "Rice", change: 5 },
-  { id: 4, name: "Oats", change: 3 },
-  { id: 5, name: "Barley", change: 2 },
+  { id: 1, name: "Corn", change: 14 },
+  { id: 2, name: "Wheat", change: 12 },
+  { id: 3, name: "Soybeans", change: 9 },
+  { id: 4, name: "Rice", change: 7 },
+  { id: 5, name: "Barley", change: 5 },
 ]
 
 const trendingNow = [
   { id: 1, name: "Corn", change: 15, trending: "up" },
-  { id: 2, name: "Rice", change: 12, trending: "up" },
-  { id: 3, name: "Wheat", change: 8, trending: "down" },
-  { id: 4, name: "Sorghum", change: 6, trending: "up" },
-  { id: 5, name: "Rye", change: 4, trending: "up" },
+  { id: 2, name: "Quinoa", change: 12, trending: "up" },
+  { id: 3, name: "Wheat", change: 10, trending: "down" },
+  { id: 4, name: "Millet", change: 8, trending: "up" },
+  { id: 5, name: "Soybeans", change: 6, trending: "up" },
 ]
 
 // Mock market data
 const allMarkets = [
-  { id: 1, name: "Wheat", quantity: "125K kg", price: 0.32, change: -2.02, unit: "kg" },
-  { id: 2, name: "Corn", quantity: "250K kg", price: 0.24, change: 1.02, unit: "kg" },
-  { id: 3, name: "Rice", quantity: "180K kg", price: 0.45, change: 0.75, unit: "kg" },
-  { id: 4, name: "Oats", quantity: "90K kg", price: 0.28, change: -1.15, unit: "kg" },
-  { id: 5, name: "Barley", quantity: "75K kg", price: 0.26, change: 0.88, unit: "kg" },
-  { id: 6, name: "Sorghum", quantity: "60K kg", price: 0.22, change: -0.65, unit: "kg" },
-  { id: 7, name: "Rye", quantity: "45K kg", price: 0.3, change: 1.25, unit: "kg" },
+  { id: 1, name: "Rice", quantity: "200K kg", price: 2.0, change: 1.02, unit: "kg" },
+  { id: 2, name: "Wheat", quantity: "125K kg", price: 1.56, change: -2.02, unit: "kg" },
+  { id: 3, name: "Corn", quantity: "340K kg", price: 0.84, change: 2.14, unit: "kg" },
+  { id: 4, name: "Soybeans", quantity: "180K kg", price: 2.75, change: 1.53, unit: "kg" },
+  { id: 5, name: "Barley", quantity: "95K kg", price: 1.12, change: -0.87, unit: "kg" },
+  { id: 6, name: "Oats", quantity: "75K kg", price: 1.65, change: 0.32, unit: "kg" },
+  { id: 7, name: "Sorghum", quantity: "120K kg", price: 1.05, change: -1.25, unit: "kg" },
+  { id: 8, name: "Rye", quantity: "60K kg", price: 1.78, change: 0.67, unit: "kg" },
+  { id: 9, name: "Millet", quantity: "40K kg", price: 2.25, change: 1.88, unit: "kg" },
+  { id: 10, name: "Quinoa", quantity: "25K kg", price: 6.45, change: 2.55, unit: "kg" },
+  { id: 11, name: "Buckwheat", quantity: "35K kg", price: 3.20, change: -0.42, unit: "kg" },
+  { id: 12, name: "Potato", quantity: "180K kg", price: 1.33, change: -1.42, unit: "kg" },
 ]
 
 interface SearchModalProps {

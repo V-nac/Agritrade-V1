@@ -2,30 +2,41 @@
 
 interface TimeframeSelectorProps {
   activeTimeframe: string
-  onTimeframeChange: (timeframe: any) => void
+  onTimeframeChange: (timeframe: "1H" | "4H" | "1D" | "1W" | "1M" | "1Y") => void
 }
 
 export default function TimeframeSelector({ activeTimeframe, onTimeframeChange }: TimeframeSelectorProps) {
   const timeframes = [
-    { label: "1H", value: "1H" },
-    { label: "4H", value: "4H" },
-    { label: "1D", value: "1D" },
-    { label: "1W", value: "1W" },
-    { label: "1M", value: "1M" },
-    { label: "1Y", value: "1Y" },
+    { value: "1H", label: "1H" },
+    { value: "4H", label: "4H" },
+    { value: "1D", label: "1D" },
+    { value: "1W", label: "1W" },
+    { value: "1M", label: "1M" },
+    { value: "1Y", label: "1Y" },
   ]
 
   return (
-    <div className="flex space-x-2 overflow-x-auto pb-1">
+    <div className="inline-flex p-1 bg-gray-100 rounded-lg">
       {timeframes.map((tf) => (
         <button
           key={tf.value}
-          className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
-            activeTimeframe === tf.value ? "bg-[#15803D] text-white" : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-          }`}
-          onClick={() => onTimeframeChange(tf.value)}
+          onClick={() => onTimeframeChange(tf.value as "1H" | "4H" | "1D" | "1W" | "1M" | "1Y")}
+          className={`
+            relative px-4 py-1.5 text-sm font-medium rounded-md transition-all duration-200
+            ${
+              activeTimeframe === tf.value
+                ? "text-gray-900 shadow-sm"
+                : "text-gray-600 hover:text-gray-900"
+            }
+          `}
         >
-          {tf.label}
+          {activeTimeframe === tf.value && (
+            <div
+              className="absolute inset-0 bg-white rounded-md shadow-sm transition-all duration-200"
+              style={{ zIndex: 0 }}
+            />
+          )}
+          <span className="relative z-10">{tf.label}</span>
         </button>
       ))}
     </div>

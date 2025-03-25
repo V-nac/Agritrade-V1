@@ -13,6 +13,7 @@ import {
   Filler,
   Legend,
   type ChartOptions,
+  Chart,
 } from "chart.js"
 
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Filler, Legend)
@@ -26,7 +27,7 @@ interface MarketChartProps {
 }
 
 export default function MarketChart({ data, priceChange }: MarketChartProps) {
-  const chartRef = useRef<ChartJS>(null)
+  const chartRef = useRef<Chart<"line">>(null)
 
   const chartColor = priceChange >= 0 ? "#15803D" : "#EF4444"
   const chartBgColor = priceChange >= 0 ? "rgba(34, 197, 94, 0.1)" : "rgba(239, 68, 68, 0.1)"
@@ -56,7 +57,7 @@ export default function MarketChart({ data, priceChange }: MarketChartProps) {
     maintainAspectRatio: false,
     layout: {
       padding: {
-        left: 15, // Add padding to the left
+        left: 15,
         right: 5,
         top: 10,
         bottom: 5,
@@ -95,7 +96,6 @@ export default function MarketChart({ data, priceChange }: MarketChartProps) {
             size: 10,
           },
         },
-        // Ensure consistent time scaling
         bounds: "ticks",
         offset: true,
       },
@@ -104,14 +104,13 @@ export default function MarketChart({ data, priceChange }: MarketChartProps) {
           color: "#f0f0f0",
         },
         ticks: {
-          callback: (value) => value.toFixed(2),
+          callback: (value) => typeof value === 'number' ? value.toFixed(2) : value,
           color: "#9CA3AF",
           font: {
             size: 10,
           },
         },
         position: "right",
-        // Ensure consistent value scaling
         beginAtZero: false,
         grace: "5%",
       },
@@ -125,8 +124,8 @@ export default function MarketChart({ data, priceChange }: MarketChartProps) {
         tension: 0.4,
       },
       point: {
-        radius: 0, // Hide points by default
-        hoverRadius: 6, // Show on hover
+        radius: 0,
+        hoverRadius: 6,
       },
     },
   }
@@ -137,7 +136,7 @@ export default function MarketChart({ data, priceChange }: MarketChartProps) {
         ref={chartRef}
         data={chartData}
         options={options}
-        redraw={true} // Force redraw when data changes
+        redraw={true}
       />
     </div>
   )

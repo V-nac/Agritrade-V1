@@ -1,9 +1,56 @@
+// Base prices and volatility for different commodities
+const COMMODITIES = {
+  RICE: { basePrice: 2.00, volatility: 0.035, unit: "kg" },
+  WHEAT: { basePrice: 1.56, volatility: 0.045, unit: "kg" },
+  CORN: { basePrice: 0.84, volatility: 0.040, unit: "kg" },
+  SOYBEANS: { basePrice: 2.75, volatility: 0.050, unit: "kg" },
+  BARLEY: { basePrice: 1.12, volatility: 0.030, unit: "kg" },
+  OATS: { basePrice: 1.65, volatility: 0.035, unit: "kg" },
+  SORGHUM: { basePrice: 1.05, volatility: 0.040, unit: "kg" },
+  RYE: { basePrice: 1.78, volatility: 0.035, unit: "kg" },
+  MILLET: { basePrice: 2.25, volatility: 0.045, unit: "kg" },
+  QUINOA: { basePrice: 6.45, volatility: 0.060, unit: "kg" },
+  BUCKWHEAT: { basePrice: 3.20, volatility: 0.040, unit: "kg" },
+  POTATO: { basePrice: 1.33, volatility: 0.035, unit: "kg" },
+  MANGO: { basePrice: 1.98, volatility: 0.050, unit: "kg" },
+  COFFEE: { basePrice: 4.85, volatility: 0.060, unit: "kg" },
+  COTTON: { basePrice: 0.85, volatility: 0.045, unit: "kg" },
+  SUGAR: { basePrice: 0.25, volatility: 0.055, unit: "kg" },
+  COCOA: { basePrice: 3.60, volatility: 0.070, unit: "kg" },
+  ORANGE: { basePrice: 2.15, volatility: 0.065, unit: "kg" },
+}
+
 // Helper function to generate random price data
-function generatePriceData(basePrice: number, volatility: number, count: number) {
-  const prices = []
+function generatePriceData(basePrice: number, volatility: number, timeframe: string) {
+  let dataPoints: number
+  
+  switch (timeframe) {
+    case "1H":
+      dataPoints = 12
+      break
+    case "4H":
+      dataPoints = 12
+      break
+    case "1D":
+      dataPoints = 24
+      break
+    case "1W":
+      dataPoints = 7
+      break
+    case "1M":
+      dataPoints = 15
+      break
+    case "1Y":
+      dataPoints = 12
+      break
+    default:
+      dataPoints = 24
+  }
+
+  const prices: number[] = []
   let currentPrice = basePrice
 
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < dataPoints; i++) {
     // Random walk with some mean reversion
     const change = (Math.random() - 0.5) * volatility * basePrice
     currentPrice = currentPrice + change
@@ -11,10 +58,20 @@ function generatePriceData(basePrice: number, volatility: number, count: number)
     if (currentPrice < basePrice * 0.5) {
       currentPrice = basePrice * 0.5
     }
-    prices.push(Number.parseFloat(currentPrice.toFixed(2)))
+    prices.push(Number(currentPrice.toFixed(2)))
   }
 
-  return prices
+  const labels = generateTimeLabels(timeframe, dataPoints)
+  const priceChange = prices[prices.length - 1] - prices[0]
+  const priceChangePercent = (priceChange / prices[0]) * 100
+
+  return {
+    currentPrice: prices[prices.length - 1],
+    priceChange,
+    priceChangePercent,
+    prices,
+    labels,
+  }
 }
 
 // Generate time labels based on timeframe
@@ -143,68 +200,32 @@ function generateOpenOrders() {
 
 // Main function to generate market data
 export function generateMarketData(symbol: string, timeframe: string) {
-  // Base prices for different commodities
-  const basePrices: Record<string, number> = {
-    corn: 2.0,
-    wheat: 1.56,
-    rice: 2.2,
-    potato: 1.33,
-    soybean: 2.45,
-    coffee: 3.75,
-    cotton: 1.85,
-    sugar: 0.95,
-    default: 2.0,
-  }
+  const commodity = COMMODITIES[symbol as keyof typeof COMMODITIES] || COMMODITIES.WHEAT
+  const { basePrice, volatility, unit } = commodity
+  
+  const {
+    currentPrice,
+    priceChange,
+    priceChangePercent,
+    prices,
+    labels,
+  } = generatePriceData(basePrice, volatility, timeframe)
 
-  const basePrice = basePrices[symbol.toLowerCase()] || basePrices.default
-
-  // Generate price data points based on timeframe
-  let dataPoints = 24
-  switch (timeframe) {
-    case "1H":
-      dataPoints = 12
-      break
-    case "4H":
-      dataPoints = 12
-      break
-    case "1D":
-      dataPoints = 24
-      break
-    case "1W":
-      dataPoints = 7
-      break
-    case "1M":
-      dataPoints = 15
-      break
-    case "1Y":
-      dataPoints = 12
-      break
-  }
-
-  const prices = generatePriceData(basePrice, 0.02, dataPoints)
-  const labels = generateTimeLabels(timeframe, dataPoints)
-
-  // Calculate price change
-  const startPrice = prices[0]
-  const currentPrice = prices[prices.length - 1]
-  const priceChange = currentPrice - startPrice
-  const priceChangePercent = (priceChange / startPrice) * 100
-
-  // Generate bid and ask prices
-  const spread = basePrice * 0.01
-  const bid = Number.parseFloat((currentPrice - spread / 2).toFixed(2))
-  const ask = Number.parseFloat((currentPrice + spread / 2).toFixed(2))
-
-  // Generate day high and low
-  const dayHigh = Number.parseFloat((currentPrice * (1 + Math.random() * 0.05)).toFixed(2))
-  const dayLow = Number.parseFloat((currentPrice * (1 - Math.random() * 0.05)).toFixed(2))
-
-  // Generate volume
-  const volumeValue = Math.floor(Math.random() * 200) + 50
-  const volume = `${volumeValue}.${Math.floor(Math.random() * 10)}M`
-
-  // Generate previous close
-  const prevClose = Number.parseFloat((currentPrice * (1 + (Math.random() - 0.5) * 0.02)).toFixed(2))
+  // Generate realistic bid/ask spread
+  const spread = currentPrice * 0.001 // 0.1% spread
+  const bid = Number((currentPrice - spread / 2).toFixed(2))
+  const ask = Number((currentPrice + spread / 2).toFixed(2))
+  
+  // Generate day high/low with some margin around current price
+  const dayHigh = Number((currentPrice * (1 + Math.random() * 0.02)).toFixed(2))
+  const dayLow = Number((currentPrice * (1 - Math.random() * 0.02)).toFixed(2))
+  
+  // Generate volume with some randomness
+  const baseVolume = Math.floor(currentPrice * 10000)
+  const volume = `${(baseVolume + Math.floor(Math.random() * baseVolume * 0.2)).toLocaleString()}K ${unit}`
+  
+  // Previous close slightly different from current price
+  const prevClose = Number((currentPrice * (1 + (Math.random() - 0.5) * 0.01)).toFixed(2))
 
   return {
     id: Math.floor(Math.random() * 1000) + 1,
@@ -212,7 +233,7 @@ export function generateMarketData(symbol: string, timeframe: string) {
     currentPrice,
     priceChange,
     priceChangePercent,
-    unit: "kg",
+    unit,
     chartData: {
       labels,
       prices,

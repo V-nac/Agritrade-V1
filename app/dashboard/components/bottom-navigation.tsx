@@ -10,8 +10,9 @@ export default function BottomNavigation() {
   const pathname = usePathname()
   const [isBuySellModalOpen, setIsBuySellModalOpen] = useState(false)
 
-  // Check if the current path is the insights page or a sub-page
+  // Check if the current path is active for specific sections
   const isInsightsActive = pathname === "/dashboard/insights" || pathname.startsWith("/dashboard/insights/")
+  const isCommunityActive = pathname === "/community" || pathname.startsWith("/community/")
 
   return (
     <>
@@ -39,10 +40,10 @@ export default function BottomNavigation() {
             <span className="text-xs mt-1">Buy/Sell</span>
           </button>
 
-          <Link href="/dashboard/community" className="flex flex-col items-center justify-center w-full h-full">
-            <Users className={`h-6 w-6 ${pathname === "/dashboard/community" ? "text-[#22C55E]" : "text-gray-500"}`} />
+          <Link href="/community" className="flex flex-col items-center justify-center w-full h-full">
+            <Users className={`h-6 w-6 ${isCommunityActive ? "text-[#22C55E]" : "text-gray-500"}`} />
             <span
-              className={`text-xs mt-1 ${pathname === "/dashboard/community" ? "text-[#22C55E]" : "text-gray-500"}`}
+              className={`text-xs mt-1 ${isCommunityActive ? "text-[#22C55E]" : "text-gray-500"}`}
             >
               Community
             </span>

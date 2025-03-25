@@ -11,14 +11,24 @@ import { useWatchlist } from "@/context/watchlist-context"
 const marketData = [
   { id: 1, name: "Rice", price: 2.0, change: 1.02, unit: "kg", quantity: "200K kg" },
   { id: 2, name: "Wheat", price: 1.56, change: -2.02, unit: "kg", quantity: "125K kg" },
-  { id: 3, name: "Potato", price: 1.33, change: -1.42, unit: "kg", quantity: "180K kg" },
+  { id: 3, name: "Corn", price: 0.84, change: 2.14, unit: "kg", quantity: "340K kg" },
+  { id: 4, name: "Soybeans", price: 2.75, change: 1.53, unit: "kg", quantity: "180K kg" },
+  { id: 5, name: "Barley", price: 1.12, change: -0.87, unit: "kg", quantity: "95K kg" },
+  { id: 6, name: "Oats", price: 1.65, change: 0.32, unit: "kg", quantity: "75K kg" },
+  { id: 7, name: "Sorghum", price: 1.05, change: -1.25, unit: "kg", quantity: "120K kg" },
+  { id: 8, name: "Rye", price: 1.78, change: 0.67, unit: "kg", quantity: "60K kg" },
+  { id: 9, name: "Millet", price: 2.25, change: 1.88, unit: "kg", quantity: "40K kg" },
+  { id: 10, name: "Quinoa", price: 6.45, change: 2.55, unit: "kg", quantity: "25K kg" },
+  { id: 11, name: "Buckwheat", price: 3.20, change: -0.42, unit: "kg", quantity: "35K kg" },
+  { id: 12, name: "Potato", price: 1.33, change: -1.42, unit: "kg", quantity: "180K kg" },
 ]
 
 const quickAccessItems = [
-  { id: 1, name: "Potato", change: 2.5 },
-  { id: 2, name: "Wheat", change: 1.25 },
-  { id: 3, name: "Rice", change: -3.13 },
-  { id: 4, name: "Mango", change: -1.06 },
+  { id: 1, name: "Corn", change: 2.14 },
+  { id: 2, name: "Wheat", change: -2.02 },
+  { id: 3, name: "Rice", change: 1.02 },
+  { id: 4, name: "Soybeans", change: 1.53 },
+  { id: 5, name: "Barley", change: -0.87 },
 ]
 
 export default function MarketOverview() {
